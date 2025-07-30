@@ -86,6 +86,29 @@ This is a Next.js 15 AI chatbot application built with the AI SDK, featuring:
 - **Database**: Drizzle ORM with migrations in `lib/db/migrations/`
 - **Testing**: Playwright for e2e tests with custom page objects
 
+## AWS CloudFormation Integration
+
+The application now supports querying AWS resources through natural language using the AWS CloudFormation MCP integration:
+
+### Features
+- **Resource Listing**: Query EC2 instances, S3 buckets, Lambda functions, RDS databases, and 1,100+ other AWS resource types
+- **Resource Details**: Get specific resource properties and configurations
+- **CloudFormation Stacks**: List and describe CloudFormation stacks
+- **Natural Language Interface**: Ask questions like "What EC2 instances are running?" or "Show me my S3 buckets"
+
+### Tool Actions
+- `list_resources` - Enumerate resources by type (e.g., AWS::EC2::Instance)
+- `get_resource` - Retrieve specific resource details by identifier
+- `list_stacks` - Show CloudFormation stacks with their status
+- `describe_stack` - Get detailed stack information including parameters and outputs
+
+### Usage Examples
+Users can ask natural language questions such as:
+- "List all my EC2 instances"
+- "Show me the properties of S3 bucket my-app-bucket"
+- "What CloudFormation stacks are currently running?"
+- "Describe the production-stack CloudFormation stack"
+
 ## Environment Setup
 
 Required environment variables (see `.env.example`):
@@ -93,3 +116,15 @@ Required environment variables (see `.env.example`):
 - Database connection variables for PostgreSQL
 - AI provider API keys
 - Vercel-specific variables for deployment
+
+### AWS Configuration
+- `AWS_ACCESS_KEY_ID` - AWS access key (optional if using IAM roles)
+- `AWS_SECRET_ACCESS_KEY` - AWS secret key (optional if using IAM roles)
+- `AWS_DEFAULT_REGION` - AWS region for resource queries (defaults to us-east-1)
+
+### Required AWS Permissions
+The application requires these IAM permissions for AWS resource querying:
+- `cloudcontrol:ListResources`
+- `cloudcontrol:GetResource`
+- `cloudformation:ListStacks`
+- `cloudformation:DescribeStacks`
