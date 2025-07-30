@@ -1172,3 +1172,83 @@ export const WarningIcon = ({ size = 16 }: { size?: number }) => {
     </svg>
   );
 };
+
+export const CheckCircleIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+  return (
+    <svg
+      height={size}
+      strokeLinejoin="round"
+      viewBox="0 0 16 16"
+      width={size}
+      className={className}
+      style={{ color: 'currentcolor' }}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM11.5303 6.53033L12.0607 6L11 4.93934L10.4697 5.46967L6.5 9.43934L5.53033 8.46967L5 7.93934L3.93934 9L4.46967 9.53033L5.96967 11.0303C6.26256 11.3232 6.73744 11.3232 7.03033 11.0303L11.5303 6.53033Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const AlertCircleIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+  return (
+    <svg
+      height={size}
+      strokeLinejoin="round"
+      viewBox="0 0 16 16"
+      width={size}
+      className={className}
+      style={{ color: 'currentcolor' }}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM8.75 4.75V5.5V8V8.75H7.25V8V5.5V4.75H8.75ZM8 12C8.55228 12 9 11.5523 9 11C9 10.4477 8.55228 10 8 10C7.44772 10 7 10.4477 7 11C7 11.5523 7.44772 12 8 12Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const XCircleIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+  return (
+    <svg
+      height={size}
+      strokeLinejoin="round"
+      viewBox="0 0 16 16"
+      width={size}
+      className={className}
+      style={{ color: 'currentcolor' }}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM11.5303 4.46967L10.4697 3.40901L8 5.87868L5.53033 3.40901L4.46967 4.46967L6.93934 7L4.46967 9.53033L5.53033 10.591L8 8.12132L10.4697 10.591L11.5303 9.53033L8.93934 7L11.5303 4.46967Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
+
+export const ClockIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+  return (
+    <svg
+      height={size}
+      strokeLinejoin="round"
+      viewBox="0 0 16 16"
+      width={size}
+      className={className}
+      style={{ color: 'currentcolor' }}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M16 8C16 12.4183 12.4183 16 8 16C3.58172 16 0 12.4183 0 8C0 3.58172 3.58172 0 8 0C12.4183 0 16 3.58172 16 8ZM8.75 4.25V8.43934L11.0303 10.7197L11.5607 11.25L10.5 12.3107L9.96967 11.7803L7.46967 9.28033C7.17678 8.98744 7.17678 8.51256 7.46967 8.21967L7.5 8.18934V4.25V3.5H8.25H8.75V4.25ZM8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 4.41015 11.5899 1.5 8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+};
