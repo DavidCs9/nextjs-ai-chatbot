@@ -101,6 +101,9 @@ The application now supports querying AWS resources through natural language usi
 - `get_resource` - Retrieve specific resource details by identifier
 - `list_stacks` - Show CloudFormation stacks with their status
 - `describe_stack` - Get detailed stack information including parameters and outputs
+- `describe_stack_resources` - List all resources within a specific CloudFormation stack
+- `list_log_groups` - List CloudWatch Log Groups with retention and storage information
+- `list_s3_buckets` - List S3 buckets with creation dates and regions
 
 ### Usage Examples
 Users can ask natural language questions such as:
@@ -108,6 +111,8 @@ Users can ask natural language questions such as:
 - "Show me the properties of S3 bucket my-app-bucket"
 - "What CloudFormation stacks are currently running?"
 - "Describe the production-stack CloudFormation stack"
+- "Show me all resources in the production-stack CloudFormation stack"
+- "What resources are created by the my-web-app stack?"
 
 ## Environment Setup
 
@@ -128,3 +133,4 @@ The application requires these IAM permissions for AWS resource querying:
 - `cloudcontrol:GetResource`
 - `cloudformation:ListStacks`
 - `cloudformation:DescribeStacks`
+- `cloudformation:DescribeStackResources`

@@ -9,7 +9,17 @@ import {
   CloudFormationClient,
   DescribeStacksCommand,
   ListStacksCommand,
+  DescribeStackResourcesCommand,
 } from '@aws-sdk/client-cloudformation';
+import {
+  CloudWatchLogsClient,
+  DescribeLogGroupsCommand,
+} from '@aws-sdk/client-cloudwatch-logs';
+import {
+  S3Client,
+  ListBucketsCommand,
+  GetBucketLocationCommand,
+} from '@aws-sdk/client-s3';
 
 interface AWSConfig {
   region?: string;
@@ -31,6 +41,8 @@ const createAWSClients = (config: AWSConfig = {}) => {
   return {
     cloudControl: new CloudControlClient(awsConfig),
     cloudFormation: new CloudFormationClient(awsConfig),
+    cloudWatchLogs: new CloudWatchLogsClient(awsConfig),
+    s3: new S3Client(awsConfig),
   };
 };
 
@@ -39,8 +51,8 @@ export const queryAWSResources = tool({
     This tool can list resources, get specific resource details, and describe CloudFormation stacks.
     Supports querying EC2 instances, S3 buckets, Lambda functions, RDS databases, and many other AWS services.`,
   inputSchema: z.object({
-    action: z.enum(['list_resources', 'get_resource', 'list_stacks', 'describe_stack']).describe(
-      'The action to perform: list_resources, get_resource, list_stacks, or describe_stack'
+    action: z.enum(['list_resources', 'get_resource', 'list_stacks', 'describe_stack', 'describe_stack_resources', 'list_log_groups', 'list_s3_buckets']).describe(
+      'The action to perform: list_resources, get_resource, list_stacks, describe_stack, describe_stack_resources, list_log_groups, or list_s3_buckets'
     ),
     resourceType: z.string().optional().describe(
       'AWS resource type (e.g., AWS::EC2::Instance, AWS::S3::Bucket, AWS::Lambda::Function)'
@@ -55,7 +67,7 @@ export const queryAWSResources = tool({
   }),
   execute: async ({ action, resourceType, resourceIdentifier, stackName, region }) => {
     try {
-      const { cloudControl, cloudFormation } = createAWSClients({ region });
+      const { cloudControl, cloudFormation, cloudWatchLogs, s3 } = createAWSClients({ region });
 
       switch (action) {
         case 'list_resources': {
@@ -162,6 +174,92 @@ export const queryAWSResources = tool({
               tags: stack.Tags,
               capabilities: stack.Capabilities,
             } : null,
+          };
+        }
+
+        case 'describe_stack_resources': {
+          if (!stackName) {
+            throw new Error('stackName is required for describe_stack_resources action');
+          }
+
+          const command = new DescribeStackResourcesCommand({
+            StackName: stackName,
+          });
+
+          const response = await cloudFormation.send(command);
+          
+          return {
+            success: true,
+            action: 'describe_stack_resources',
+            stackName,
+            resources: response.StackResources?.map(resource => ({
+              logicalResourceId: resource.LogicalResourceId,
+              physicalResourceId: resource.PhysicalResourceId,
+              resourceType: resource.ResourceType,
+              resourceStatus: resource.ResourceStatus,
+              resourceStatusReason: resource.ResourceStatusReason,
+              timestamp: resource.Timestamp,
+              description: resource.Description,
+            })) || [],
+            count: response.StackResources?.length || 0,
+          };
+        }
+
+        case 'list_log_groups': {
+          const command = new DescribeLogGroupsCommand({
+            limit: 50,
+          });
+
+          const response = await cloudWatchLogs.send(command);
+          
+          return {
+            success: true,
+            action: 'list_log_groups',
+            logGroups: response.logGroups?.map(logGroup => ({
+              logGroupName: logGroup.logGroupName,
+              creationTime: logGroup.creationTime,
+              retentionInDays: logGroup.retentionInDays,
+              storedBytes: logGroup.storedBytes,
+              arn: logGroup.arn,
+              metricFilterCount: logGroup.metricFilterCount,
+            })) || [],
+            count: response.logGroups?.length || 0,
+          };
+        }
+
+        case 'list_s3_buckets': {
+          const command = new ListBucketsCommand({});
+          const response = await s3.send(command);
+          
+          // Get bucket locations (regions) for each bucket
+          const bucketsWithRegion = await Promise.all(
+            (response.Buckets || []).map(async (bucket) => {
+              try {
+                const locationCommand = new GetBucketLocationCommand({
+                  Bucket: bucket.Name!,
+                });
+                const locationResponse = await s3.send(locationCommand);
+                return {
+                  bucketName: bucket.Name,
+                  creationDate: bucket.CreationDate,
+                  region: locationResponse.LocationConstraint || 'us-east-1',
+                };
+              } catch (error) {
+                // If we can't get the location, return without it
+                return {
+                  bucketName: bucket.Name,
+                  creationDate: bucket.CreationDate,
+                  region: 'unknown',
+                };
+              }
+            })
+          );
+          
+          return {
+            success: true,
+            action: 'list_s3_buckets',
+            buckets: bucketsWithRegion,
+            count: bucketsWithRegion.length,
           };
         }
 

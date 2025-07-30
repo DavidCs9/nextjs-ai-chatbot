@@ -273,6 +273,169 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
     return <StackCard stack={data.stack} />;
   }
 
+  if (action === 'describe_stack_resources' && data.resources) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>Stack Resources</span>
+            <Badge variant="secondary">{data.count} resources</Badge>
+          </CardTitle>
+          <CardDescription>Resources in stack: {data.stackName}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {data.resources.map((resource: any) => (
+              <Card key={resource.logicalResourceId} className="border-l-4 border-l-indigo-500">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base">{resource.logicalResourceId}</CardTitle>
+                    <div className="flex items-center gap-2">
+                      {getStatusIcon(resource.resourceStatus)}
+                      <Badge className={cn('text-xs', getStatusColor(resource.resourceStatus))}>
+                        {resource.resourceStatus}
+                      </Badge>
+                    </div>
+                  </div>
+                  <CardDescription>{resource.resourceType}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground font-medium">Physical ID:</span>
+                      <span className="font-mono max-w-48 truncate" title={resource.physicalResourceId}>
+                        {resource.physicalResourceId}
+                      </span>
+                    </div>
+                    {resource.timestamp && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground font-medium">Last Updated:</span>
+                        <span>{formatDate(resource.timestamp)}</span>
+                      </div>
+                    )}
+                    {resource.resourceStatusReason && (
+                      <div className="mt-2">
+                        <span className="text-muted-foreground font-medium">Status Reason:</span>
+                        <p className="text-xs mt-1">{resource.resourceStatusReason}</p>
+                      </div>
+                    )}
+                    {resource.description && (
+                      <div className="mt-2">
+                        <span className="text-muted-foreground font-medium">Description:</span>
+                        <p className="text-xs mt-1">{resource.description}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (action === 'list_log_groups' && data.logGroups) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>CloudWatch Log Groups</span>
+            <Badge variant="secondary">{data.count} found</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {data.logGroups.map((logGroup: any) => (
+              <Card key={logGroup.logGroupName} className="border-l-4 border-l-orange-500">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">{logGroup.logGroupName}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 text-xs">
+                    {logGroup.creationTime && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground font-medium">Created:</span>
+                        <span>{formatDate(logGroup.creationTime)}</span>
+                      </div>
+                    )}
+                    {logGroup.retentionInDays && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground font-medium">Retention:</span>
+                        <span>{logGroup.retentionInDays} days</span>
+                      </div>
+                    )}
+                    {logGroup.storedBytes && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground font-medium">Stored:</span>
+                        <span>{(logGroup.storedBytes / 1024 / 1024).toFixed(2)} MB</span>
+                      </div>
+                    )}
+                    {logGroup.metricFilterCount !== undefined && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground font-medium">Metric Filters:</span>
+                        <span>{logGroup.metricFilterCount}</span>
+                      </div>
+                    )}
+                    {logGroup.arn && (
+                      <div className="mt-2">
+                        <span className="text-muted-foreground font-medium">ARN:</span>
+                        <p className="text-xs mt-1 font-mono break-all">{logGroup.arn}</p>
+                      </div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (action === 'list_s3_buckets' && data.buckets) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>S3 Buckets</span>
+            <Badge variant="secondary">{data.count} found</Badge>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {data.buckets.map((bucket: any) => (
+              <Card key={bucket.bucketName} className="border-l-4 border-l-green-500">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-base">{bucket.bucketName}</CardTitle>
+                    <Badge variant="outline" className="text-xs">
+                      {bucket.region}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 text-xs">
+                    {bucket.creationDate && (
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground font-medium">Created:</span>
+                        <span>{formatDate(bucket.creationDate)}</span>
+                      </div>
+                    )}
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground font-medium">Region:</span>
+                      <span>{bucket.region}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardContent className="pt-6">
