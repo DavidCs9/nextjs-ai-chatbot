@@ -17,9 +17,6 @@ importers:
       '@ai-sdk/react':
         specifier: 2.0.0-beta.6
         version: 2.0.0-beta.6(react@19.0.0-rc-45804af1-20241021)(zod@3.25.76)
-      '@ai-sdk/xai':
-        specifier: 2.0.0-beta.2
-        version: 2.0.0-beta.2(zod@3.25.76)
       '@aws-sdk/client-cloudcontrol':
         specifier: ^3.857.0
         version: 3.857.0
@@ -297,12 +294,6 @@ packages:
     peerDependencies:
       zod: ^3.25.49
 
-  '@ai-sdk/openai-compatible@1.0.0-beta.2':
-    resolution: {integrity: sha512-dAPGHxqPw1pLrR+MrhVmdgktkGYspBFZoRrtqQzPolFzQt90W2GBAUARk8ZS/UuxEEoJSMVPOXlhhgb8QV59+g==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.25.49
-
   '@ai-sdk/openai@2.0.0-beta.15':
     resolution: {integrity: sha512-H2LqYz7RGkEO/jHjeATPQylFQJff3skkkmKy8dAB9UU8y/oJcV4JEQKR3CrMMFkG/39mXYxgZiNNkv/8jF40sQ==}
     engines: {node: '>=18'}
@@ -338,12 +329,6 @@ packages:
     peerDependenciesMeta:
       zod:
         optional: true
-
-  '@ai-sdk/xai@2.0.0-beta.2':
-    resolution: {integrity: sha512-d1ERT0ksO5StXuPb9/UoErkgHHXgdIP6xt7HIQHBcYowYpqy2ye6A15Y0Uxns9QL8tqJz6Tqt19d0wHj8ZXirA==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      zod: ^3.25.49
 
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -4549,12 +4534,6 @@ snapshots:
       '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.76)
       zod: 3.25.76
 
-  '@ai-sdk/openai-compatible@1.0.0-beta.2(zod@3.25.76)':
-    dependencies:
-      '@ai-sdk/provider': 2.0.0-beta.1
-      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.76)
-      zod: 3.25.76
-
   '@ai-sdk/openai@2.0.0-beta.15(zod@3.25.76)':
     dependencies:
       '@ai-sdk/provider': 2.0.0-beta.2
@@ -4593,13 +4572,6 @@ snapshots:
       swr: 2.3.4(react@19.0.0-rc-45804af1-20241021)
       throttleit: 2.1.0
     optionalDependencies:
-      zod: 3.25.76
-
-  '@ai-sdk/xai@2.0.0-beta.2(zod@3.25.76)':
-    dependencies:
-      '@ai-sdk/openai-compatible': 1.0.0-beta.2(zod@3.25.76)
-      '@ai-sdk/provider': 2.0.0-beta.1
-      '@ai-sdk/provider-utils': 3.0.0-beta.2(zod@3.25.76)
       zod: 3.25.76
 
   '@alloc/quick-lru@5.2.0': {}

@@ -25,6 +25,7 @@ interface AWSConfig {
   region?: string;
   accessKeyId?: string;
   secretAccessKey?: string;
+  sessionToken?: string; // Optional for temporary credentials
 }
 
 const createAWSClients = (config: AWSConfig = {}) => {
@@ -34,6 +35,7 @@ const createAWSClients = (config: AWSConfig = {}) => {
       credentials: {
         accessKeyId: config.accessKeyId,
         secretAccessKey: config.secretAccessKey,
+        sessionToken: config.sessionToken,
       },
     }),
   };
