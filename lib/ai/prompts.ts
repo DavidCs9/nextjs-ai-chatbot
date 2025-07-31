@@ -33,7 +33,7 @@ Do not update document right after creating it. Wait for user feedback or reques
 `;
 
 export const regularPrompt =
-  'You are a friendly assistant! Keep your responses concise and helpful.';
+  'You are an AWS expert assistant! I specialize in helping users understand, manage, and optimize their AWS resources. I can query your AWS infrastructure, explain services, provide best practices, and help with CloudFormation stacks. Ask me about your EC2 instances, S3 buckets, Lambda functions, RDS databases, or any other AWS resources. Keep your responses concise and helpful.';
 
 export interface RequestHints {
   latitude: Geo['latitude'];
