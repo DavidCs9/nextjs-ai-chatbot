@@ -12,6 +12,7 @@ import {
 } from './models.test';
 import { isTestEnvironment } from '../constants';
 import type { LanguageModelV2 } from '@ai-sdk/provider';
+import { atlassianMcpChat } from './providers/atlassian-mcp';
 
 export const myProvider = isTestEnvironment
   ? customProvider({
@@ -21,6 +22,7 @@ export const myProvider = isTestEnvironment
         'title-model': titleModel,
         'artifact-model': artifactModel,
         'gpt-4.1': chatModel,
+        'atlassian-mcp': atlassianMcpChat as unknown as LanguageModelV2,
       },
     })
   : customProvider({
@@ -32,8 +34,8 @@ export const myProvider = isTestEnvironment
         }),
         'title-model': openai('gpt-4o-mini'),
         'artifact-model': openai('gpt-4o'),
-        'gpt-4.1': openai('gpt-4.1-2025-04-14') as unknown as LanguageModelV2
-
+        'gpt-4.1': openai('gpt-4.1-2025-04-14') as unknown as LanguageModelV2,
+        'atlassian-mcp': atlassianMcpChat as unknown as LanguageModelV2,
       },
       imageModels: {
         'small-model': openai.imageModel('dall-e-3'),

@@ -22,4 +22,9 @@ export const chatModels: Array<ChatModel> = [
     name: 'GPT-4.1',
     description: 'OpenAI GPT-4.1 model',
   },
+  {
+    id: 'atlassian-mcp',
+    name: 'Atlassian MCP',
+    description: 'Atlassian Model/Chat Provider for enterprise productivity',
+  },
 ];
