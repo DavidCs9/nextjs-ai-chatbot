@@ -39,6 +39,21 @@ function PureSuggestedActions({
       label: 'the ecoviz serverless stack',
       action: 'Can you tell me about the ecoviz serverless stack?',
     },
+    {
+      title: 'Show me the repository',
+      label: 'information and structure',
+      action: 'Show me the repository information and file structure',
+    },
+    {
+      title: 'List recent commits',
+      label: 'and their changes',
+      action: 'List recent commits and show what files were changed',
+    },
+    {
+      title: 'Find all TypeScript',
+      label: 'component files',
+      action: 'Search for all TypeScript component files in the repository',
+    },
   ];
 
   return (
