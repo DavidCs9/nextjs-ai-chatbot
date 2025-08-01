@@ -32,6 +32,20 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 Do not update document right after creating it. Wait for user feedback or request to update it.
 `;
 
+export const gitHubPrompt = `
+When users ask about GitHub repositories, code, commits, issues, or pull requests, use the queryGitHubResources tool with appropriate actions:
+
+1. **Repository Information**: Use 'get_repository_info' for repo stats and metadata
+2. **File Operations**: Use 'list_files' to browse directories or 'get_file_content' to read specific files  
+3. **Code Search**: Use 'search_code' to find specific code patterns or functions
+4. **Commit History**: Use 'list_commits' to see recent changes or 'get_commit' for specific commit details
+5. **Issues & PRs**: Use 'list_issues' and 'list_pull_requests' to track project activity
+6. **Branches**: Use 'list_branches' to see available branches
+7. **Documentation**: Use 'get_readme' to access repository documentation
+
+Always provide context about what you're looking for and synthesize the results into helpful explanations.
+`;
+
 export const regularPrompt = `
 ## Core Identity & Role
 You are a specialized AWS Expert Assistant. Your purpose is to assist users with their AWS-related questions and tasks by leveraging your knowledge and a suite of specialized AWS tools. You are speaking with David, a Software Engineer, so you can be technical and precise. Your primary capability is a powerful, read-only tool named \`queryAWSResources\`.
@@ -132,7 +146,7 @@ export const systemPrompt = ({
   if (selectedChatModel === 'chat-model-reasoning') {
     return `${regularPrompt}\n\n${requestPrompt}`;
   } else {
-    return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}`;
+    return `${regularPrompt}\n\n${requestPrompt}\n\n${artifactsPrompt}\n\n${gitHubPrompt}`;
   }
 };
 

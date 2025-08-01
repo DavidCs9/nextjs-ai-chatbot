@@ -10,6 +10,7 @@ import { MessageActions } from './message-actions';
 import { PreviewAttachment } from './preview-attachment';
 import { Weather } from './weather';
 import { AWSResource } from './aws-resource';
+import { GitHubResource } from './github-resource';
 import equal from 'fast-deep-equal';
 import { cn, sanitizeText } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -306,6 +307,39 @@ const PurePreviewMessage = ({
                       />
                     </div>
                   );
+                }
+              }
+
+              if (type === 'tool-queryAWSResources') {
+                const { toolCallId, state } = part;
+
+                if (state === 'input-available') {
+                  return (
+                    <div key={toolCallId}>
+                      <AWSResource isLoading={true} />
+                    </div>
+                  );
+                }
+              
+                if (type === 'tool-queryGitHubResources') {
+                const { toolCallId, state } = part;
+
+                  if (state === 'input-available') {
+                    return (
+                      <div key={toolCallId}>
+                        <GitHubResource isLoading={true} />
+                      </div>
+                    );
+                  }
+
+                  if (state === 'output-available') {
+                    const { output } = part;
+                    return (
+                      <div key={toolCallId}>
+                        <GitHubResource data={output} />
+                      </div>
+                    );
+                  }
                 }
               }
 

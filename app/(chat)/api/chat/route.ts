@@ -19,6 +19,7 @@ import {
 } from '@/lib/db/queries';
 import { convertToUIMessages, generateUUID } from '@/lib/utils';
 import { generateTitleFromUserMessage } from '../../actions';
+import { queryGitHubResources } from '@/lib/ai/tools/query-github-resources';
 import { createDocument } from '@/lib/ai/tools/create-document';
 import { updateDocument } from '@/lib/ai/tools/update-document';
 import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
@@ -167,6 +168,7 @@ export async function POST(request: Request) {
                   'updateDocument',
                   'requestSuggestions',
                   'queryAWSResources',
+                  'queryGitHubResources',
                 ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           tools: {
@@ -178,6 +180,7 @@ export async function POST(request: Request) {
               dataStream,
             }),
             queryAWSResources,
+            queryGitHubResources,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
