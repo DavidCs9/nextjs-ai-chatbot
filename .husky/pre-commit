@@ -1,0 +1,59 @@
+#!/bin/sh
+# Husky pre-commit hook
+
+# Check if there are any staged files
+if git diff --staged --quiet; then
+  echo "No staged files, skipping pre-commit hooks"
+  exit 0
+fi
+
+# Check if any staged files are in the directories we care about
+WATCHED_DIRS="app/ artifacts/ hooks/ lib/ tests/"
+STAGED_FILES=$(git diff --staged --name-only)
+RELEVANT_FILES=""
+
+for file in $STAGED_FILES; do
+  for dir in $WATCHED_DIRS; do
+    if echo "$file" | grep -q "^$dir"; then
+      RELEVANT_FILES="$RELEVANT_FILES $file"
+      break
+    fi
+  done
+done
+
+if [ -z "$RELEVANT_FILES" ]; then
+  echo "No staged files in watched directories (app/, artifacts/, hooks/, lib/, tests/), skipping pre-commit hooks"
+  exit 0
+fi
+
+echo "🔍 Running pre-commit checks for files in: app/, artifacts/, hooks/, lib/, tests/"
+echo "📁 Relevant staged files: $RELEVANT_FILES"
+
+# 1. Run TypeScript type checking
+echo "📝 Type checking..."
+npx tsc --noEmit
+if [ $? -ne 0 ]; then
+  echo "❌ TypeScript type check failed"
+  exit 1
+fi
+
+# 2. Run linting and formatting
+echo "🧹 Linting and formatting..."
+pnpm lint:fix
+if [ $? -ne 0 ]; then
+  echo "❌ Linting failed"
+  exit 1
+fi
+
+# 3. Format code
+echo "✨ Formatting code..."
+pnpm format
+if [ $? -ne 0 ]; then
+  echo "❌ Formatting failed"
+  exit 1
+fi
+
+# 4. Add back any files that were formatted
+git add .
+
+echo "✅ Pre-commit checks passed!"
