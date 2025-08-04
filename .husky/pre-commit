@@ -8,7 +8,7 @@ if git diff --staged --quiet; then
 fi
 
 # Check if any staged files are in the directories we care about
-WATCHED_DIRS="app/ artifacts/ hooks/ lib/ tests/"
+WATCHED_DIRS="app/ artifacts/ hooks/ lib/ tests/ components/"
 STAGED_FILES=$(git diff --staged --name-only)
 RELEVANT_FILES=""
 
