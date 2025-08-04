@@ -1,9 +1,20 @@
 import { useState, useMemo } from 'react';
 import { Badge } from './ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { CheckCircleIcon, AlertCircleIcon, XCircleIcon, ClockIcon } from './icons';
+import {
+  CheckCircleIcon,
+  AlertCircleIcon,
+  XCircleIcon,
+  ClockIcon,
+} from './icons';
 import { cn } from '@/lib/utils';
 
 interface AWSResourceProps {
@@ -25,9 +36,12 @@ const getStatusIcon = (status: string) => {
 };
 
 const getStatusColor = (status: string) => {
-  if (status.includes('COMPLETE')) return 'bg-green-100 text-green-800 border-green-200';
-  if (status.includes('FAILED')) return 'bg-red-100 text-red-800 border-red-200';
-  if (status.includes('PROGRESS') || status.includes('PENDING')) return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+  if (status.includes('COMPLETE'))
+    return 'bg-green-100 text-green-800 border-green-200';
+  if (status.includes('FAILED'))
+    return 'bg-red-100 text-red-800 border-red-200';
+  if (status.includes('PROGRESS') || status.includes('PENDING'))
+    return 'bg-yellow-100 text-yellow-800 border-yellow-200';
   return 'bg-orange-100 text-orange-800 border-orange-200';
 };
 
@@ -36,7 +50,10 @@ const formatDate = (dateString: string) => {
 };
 
 // Simple search icon component
-const SearchIcon = ({ size = 16, className }: { size?: number; className?: string }) => (
+const SearchIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => (
   <svg
     width={size}
     height={size}
@@ -54,7 +71,10 @@ const SearchIcon = ({ size = 16, className }: { size?: number; className?: strin
 );
 
 // Navigation icons
-const ChevronLeftIcon = ({ size = 16, className }: { size?: number; className?: string }) => (
+const ChevronLeftIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => (
   <svg
     width={size}
     height={size}
@@ -70,7 +90,10 @@ const ChevronLeftIcon = ({ size = 16, className }: { size?: number; className?: 
   </svg>
 );
 
-const ChevronRightIcon = ({ size = 16, className }: { size?: number; className?: string }) => (
+const ChevronRightIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => (
   <svg
     width={size}
     height={size}
@@ -97,21 +120,23 @@ interface ResourceListProps {
   itemsPerPage?: number;
 }
 
-const ResourceList = ({ 
-  items, 
-  renderItem, 
-  searchFunction, 
-  title, 
-  count, 
-  emptyMessage = "No items found",
-  itemsPerPage = 3 
+const ResourceList = ({
+  items,
+  renderItem,
+  searchFunction,
+  title,
+  count,
+  emptyMessage = 'No items found',
+  itemsPerPage = 3,
 }: ResourceListProps) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   const filteredItems = useMemo(() => {
     if (!searchTerm) return items;
-    return items.filter(item => searchFunction(item, searchTerm.toLowerCase()));
+    return items.filter((item) =>
+      searchFunction(item, searchTerm.toLowerCase()),
+    );
   }, [items, searchTerm, searchFunction]);
 
   // Reset to page 1 when search term changes
@@ -143,13 +168,18 @@ const ResourceList = ({
           <CardTitle className="flex items-center gap-2">
             <span>{title}</span>
             <Badge variant="secondary">
-              {searchTerm ? `${filteredItems.length} of ${count}` : `${count} found`}
+              {searchTerm
+                ? `${filteredItems.length} of ${count}`
+                : `${count} found`}
             </Badge>
           </CardTitle>
         </div>
         {items.length > 0 && (
           <div className="relative">
-            <SearchIcon size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <SearchIcon
+              size={16}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
             <Input
               placeholder={`Search ${title.toLowerCase()}...`}
               value={searchTerm}
@@ -169,15 +199,18 @@ const ResourceList = ({
             {/* Fixed height container for items */}
             <div className="min-h-[300px]">
               <div className="space-y-3">
-                {currentItems.map((item, index) => renderItem(item, startIndex + index))}
+                {currentItems.map((item, index) =>
+                  renderItem(item, startIndex + index),
+                )}
               </div>
             </div>
-            
+
             {/* Pagination controls */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between mt-4 pt-4 border-t">
                 <div className="text-sm text-muted-foreground">
-                  Page {currentPage} of {totalPages} ({filteredItems.length} total)
+                  Page {currentPage} of {totalPages} ({filteredItems.length}{' '}
+                  total)
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
@@ -211,7 +244,10 @@ const ResourceList = ({
   );
 };
 
-const ResourceCard = ({ resource, resourceType }: { resource: any; resourceType?: string }) => (
+const ResourceCard = ({
+  resource,
+  resourceType,
+}: { resource: any; resourceType?: string }) => (
   <Card className="mb-3">
     <CardHeader className="pb-3">
       <div className="flex items-center justify-between">
@@ -227,14 +263,21 @@ const ResourceCard = ({ resource, resourceType }: { resource: any; resourceType?
     </CardHeader>
     <CardContent className="pt-0">
       <div className="space-y-2">
-        {Object.entries(resource.properties || {}).slice(0, 5).map(([key, value]: [string, any]) => (
-          <div key={key} className="flex justify-between text-xs">
-            <span className="text-muted-foreground font-medium">{key}:</span>
-            <span className="text-right max-w-48 truncate" title={String(value)}>
-              {typeof value === 'object' ? JSON.stringify(value) : String(value)}
-            </span>
-          </div>
-        ))}
+        {Object.entries(resource.properties || {})
+          .slice(0, 5)
+          .map(([key, value]: [string, any]) => (
+            <div key={key} className="flex justify-between text-xs">
+              <span className="text-muted-foreground font-medium">{key}:</span>
+              <span
+                className="text-right max-w-48 truncate"
+                title={String(value)}
+              >
+                {typeof value === 'object'
+                  ? JSON.stringify(value)
+                  : String(value)}
+              </span>
+            </div>
+          ))}
       </div>
     </CardContent>
   </Card>
@@ -265,7 +308,9 @@ const StackCard = ({ stack }: { stack: any }) => (
           </div>
           {stack.lastUpdatedTime && (
             <div>
-              <span className="font-medium text-muted-foreground">Last Updated:</span>
+              <span className="font-medium text-muted-foreground">
+                Last Updated:
+              </span>
               <p>{formatDate(stack.lastUpdatedTime)}</p>
             </div>
           )}
@@ -276,8 +321,13 @@ const StackCard = ({ stack }: { stack: any }) => (
             <h4 className="font-medium text-sm mb-2">Parameters</h4>
             <div className="space-y-1">
               {stack.parameters.map((param: any) => (
-                <div key={param.ParameterKey} className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{param.ParameterKey}:</span>
+                <div
+                  key={param.ParameterKey}
+                  className="flex justify-between text-xs"
+                >
+                  <span className="text-muted-foreground">
+                    {param.ParameterKey}:
+                  </span>
                   <span className="font-mono">{param.ParameterValue}</span>
                 </div>
               ))}
@@ -292,13 +342,20 @@ const StackCard = ({ stack }: { stack: any }) => (
               {stack.outputs.map((output: any) => (
                 <div key={output.OutputKey} className="space-y-1">
                   <div className="flex justify-between text-xs">
-                    <span className="text-muted-foreground font-medium">{output.OutputKey}:</span>
-                    <span className="font-mono max-w-48 truncate" title={output.OutputValue}>
+                    <span className="text-muted-foreground font-medium">
+                      {output.OutputKey}:
+                    </span>
+                    <span
+                      className="font-mono max-w-48 truncate"
+                      title={output.OutputValue}
+                    >
                       {output.OutputValue}
                     </span>
                   </div>
                   {output.Description && (
-                    <p className="text-xs text-muted-foreground">{output.Description}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {output.Description}
+                    </p>
                   )}
                 </div>
               ))}
@@ -370,20 +427,26 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
         count={data.count}
         searchFunction={(resource, searchTerm) => {
           const identifier = (resource.identifier || '').toLowerCase();
-          const resourceTypeName = data.resourceType ? data.resourceType.split('::').pop()?.toLowerCase() || '' : '';
-          const propertiesText = resource.properties ? 
-            Object.entries(resource.properties).map(([key, value]) => 
-              `${key} ${String(value)}`
-            ).join(' ').toLowerCase() : '';
-          
-          return identifier.includes(searchTerm) || 
-                 resourceTypeName.includes(searchTerm) || 
-                 propertiesText.includes(searchTerm);
+          const resourceTypeName = data.resourceType
+            ? data.resourceType.split('::').pop()?.toLowerCase() || ''
+            : '';
+          const propertiesText = resource.properties
+            ? Object.entries(resource.properties)
+                .map(([key, value]) => `${key} ${String(value)}`)
+                .join(' ')
+                .toLowerCase()
+            : '';
+
+          return (
+            identifier.includes(searchTerm) ||
+            resourceTypeName.includes(searchTerm) ||
+            propertiesText.includes(searchTerm)
+          );
         }}
         renderItem={(resource, index) => (
-          <ResourceCard 
-            key={resource.identifier || index} 
-            resource={resource} 
+          <ResourceCard
+            key={resource.identifier || index}
+            resource={resource}
             resourceType={data.resourceType}
           />
         )}
@@ -401,7 +464,10 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
           )}
         </CardHeader>
         <CardContent>
-          <ResourceCard resource={data.resource} resourceType={data.resourceType} />
+          <ResourceCard
+            resource={data.resource}
+            resourceType={data.resourceType}
+          />
         </CardContent>
       </Card>
     );
@@ -416,20 +482,29 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
         searchFunction={(stack, searchTerm) => {
           const stackName = (stack.stackName || '').toLowerCase();
           const stackStatus = (stack.stackStatus || '').toLowerCase();
-          const templateDescription = (stack.templateDescription || '').toLowerCase();
-          
-          return stackName.includes(searchTerm) || 
-                 stackStatus.includes(searchTerm) || 
-                 templateDescription.includes(searchTerm);
+          const templateDescription = (
+            stack.templateDescription || ''
+          ).toLowerCase();
+
+          return (
+            stackName.includes(searchTerm) ||
+            stackStatus.includes(searchTerm) ||
+            templateDescription.includes(searchTerm)
+          );
         }}
         renderItem={(stack, index) => (
-          <Card key={stack.stackName || index} className="border-l-4 border-l-blue-500">
+          <Card
+            key={stack.stackName || index}
+            className="border-l-4 border-l-blue-500"
+          >
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">{stack.stackName}</CardTitle>
                 <div className="flex items-center gap-2">
                   {getStatusIcon(stack.stackStatus)}
-                  <Badge className={cn('text-xs', getStatusColor(stack.stackStatus))}>
+                  <Badge
+                    className={cn('text-xs', getStatusColor(stack.stackStatus))}
+                  >
                     {stack.stackStatus}
                   </Badge>
                 </div>
@@ -467,22 +542,36 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
           const physicalId = (resource.physicalResourceId || '').toLowerCase();
           const resourceType = (resource.resourceType || '').toLowerCase();
           const resourceStatus = (resource.resourceStatus || '').toLowerCase();
-          const statusReason = (resource.resourceStatusReason || '').toLowerCase();
-          
-          return logicalId.includes(searchTerm) || 
-                 physicalId.includes(searchTerm) || 
-                 resourceType.includes(searchTerm) || 
-                 resourceStatus.includes(searchTerm) ||
-                 statusReason.includes(searchTerm);
+          const statusReason = (
+            resource.resourceStatusReason || ''
+          ).toLowerCase();
+
+          return (
+            logicalId.includes(searchTerm) ||
+            physicalId.includes(searchTerm) ||
+            resourceType.includes(searchTerm) ||
+            resourceStatus.includes(searchTerm) ||
+            statusReason.includes(searchTerm)
+          );
         }}
         renderItem={(resource, index) => (
-          <Card key={resource.logicalResourceId || index} className="border-l-4 border-l-indigo-500">
+          <Card
+            key={resource.logicalResourceId || index}
+            className="border-l-4 border-l-indigo-500"
+          >
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-base">{resource.logicalResourceId}</CardTitle>
+                <CardTitle className="text-base">
+                  {resource.logicalResourceId}
+                </CardTitle>
                 <div className="flex items-center gap-2">
                   {getStatusIcon(resource.resourceStatus)}
-                  <Badge className={cn('text-xs', getStatusColor(resource.resourceStatus))}>
+                  <Badge
+                    className={cn(
+                      'text-xs',
+                      getStatusColor(resource.resourceStatus),
+                    )}
+                  >
                     {resource.resourceStatus}
                   </Badge>
                 </div>
@@ -492,26 +581,39 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
             <CardContent>
               <div className="space-y-2 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground font-medium">Physical ID:</span>
-                  <span className="font-mono max-w-48 truncate" title={resource.physicalResourceId}>
+                  <span className="text-muted-foreground font-medium">
+                    Physical ID:
+                  </span>
+                  <span
+                    className="font-mono max-w-48 truncate"
+                    title={resource.physicalResourceId}
+                  >
                     {resource.physicalResourceId}
                   </span>
                 </div>
                 {resource.timestamp && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Last Updated:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Last Updated:
+                    </span>
                     <span>{formatDate(resource.timestamp)}</span>
                   </div>
                 )}
                 {resource.resourceStatusReason && (
                   <div className="mt-2">
-                    <span className="text-muted-foreground font-medium">Status Reason:</span>
-                    <p className="text-xs mt-1">{resource.resourceStatusReason}</p>
+                    <span className="text-muted-foreground font-medium">
+                      Status Reason:
+                    </span>
+                    <p className="text-xs mt-1">
+                      {resource.resourceStatusReason}
+                    </p>
                   </div>
                 )}
                 {resource.description && (
                   <div className="mt-2">
-                    <span className="text-muted-foreground font-medium">Description:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Description:
+                    </span>
                     <p className="text-xs mt-1">{resource.description}</p>
                   </div>
                 )}
@@ -532,44 +634,63 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
         searchFunction={(logGroup, searchTerm) => {
           const logGroupName = (logGroup.logGroupName || '').toLowerCase();
           const arn = (logGroup.arn || '').toLowerCase();
-          
+
           return logGroupName.includes(searchTerm) || arn.includes(searchTerm);
         }}
         renderItem={(logGroup, index) => (
-          <Card key={logGroup.logGroupName || index} className="border-l-4 border-l-orange-500">
+          <Card
+            key={logGroup.logGroupName || index}
+            className="border-l-4 border-l-orange-500"
+          >
             <CardHeader className="pb-2">
-              <CardTitle className="text-base">{logGroup.logGroupName}</CardTitle>
+              <CardTitle className="text-base">
+                {logGroup.logGroupName}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2 text-xs">
                 {logGroup.creationTime && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Created:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Created:
+                    </span>
                     <span>{formatDate(logGroup.creationTime)}</span>
                   </div>
                 )}
                 {logGroup.retentionInDays && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Retention:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Retention:
+                    </span>
                     <span>{logGroup.retentionInDays} days</span>
                   </div>
                 )}
                 {logGroup.storedBytes && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Stored:</span>
-                    <span>{(logGroup.storedBytes / 1024 / 1024).toFixed(2)} MB</span>
+                    <span className="text-muted-foreground font-medium">
+                      Stored:
+                    </span>
+                    <span>
+                      {(logGroup.storedBytes / 1024 / 1024).toFixed(2)} MB
+                    </span>
                   </div>
                 )}
                 {logGroup.metricFilterCount !== undefined && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Metric Filters:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Metric Filters:
+                    </span>
                     <span>{logGroup.metricFilterCount}</span>
                   </div>
                 )}
                 {logGroup.arn && (
                   <div className="mt-2">
-                    <span className="text-muted-foreground font-medium">ARN:</span>
-                    <p className="text-xs mt-1 font-mono break-all">{logGroup.arn}</p>
+                    <span className="text-muted-foreground font-medium">
+                      ARN:
+                    </span>
+                    <p className="text-xs mt-1 font-mono break-all">
+                      {logGroup.arn}
+                    </p>
                   </div>
                 )}
               </div>
@@ -589,11 +710,14 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
         searchFunction={(bucket, searchTerm) => {
           const bucketName = (bucket.bucketName || '').toLowerCase();
           const region = (bucket.region || '').toLowerCase();
-          
+
           return bucketName.includes(searchTerm) || region.includes(searchTerm);
         }}
         renderItem={(bucket, index) => (
-          <Card key={bucket.bucketName || index} className="border-l-4 border-l-green-500">
+          <Card
+            key={bucket.bucketName || index}
+            className="border-l-4 border-l-green-500"
+          >
             <CardHeader className="pb-2">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-base">{bucket.bucketName}</CardTitle>
@@ -606,12 +730,16 @@ export const AWSResource = ({ data, isLoading }: AWSResourceProps) => {
               <div className="space-y-2 text-xs">
                 {bucket.creationDate && (
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-medium">Created:</span>
+                    <span className="text-muted-foreground font-medium">
+                      Created:
+                    </span>
                     <span>{formatDate(bucket.creationDate)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <span className="text-muted-foreground font-medium">Region:</span>
+                  <span className="text-muted-foreground font-medium">
+                    Region:
+                  </span>
                   <span>{bucket.region}</span>
                 </div>
               </div>

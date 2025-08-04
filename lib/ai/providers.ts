@@ -32,8 +32,7 @@ export const myProvider = isTestEnvironment
         }),
         'title-model': openai('gpt-4o-mini'),
         'artifact-model': openai('gpt-4o'),
-        'gpt-4.1': openai('gpt-4.1-2025-04-14') as unknown as LanguageModelV2
-
+        'gpt-4.1': openai('gpt-4.1-2025-04-14') as unknown as LanguageModelV2,
       },
       imageModels: {
         'small-model': openai.imageModel('dall-e-3'),

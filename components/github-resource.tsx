@@ -1,6 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ExternalLink, GitBranch, GitCommit, Users, Star, Eye, GitFork } from 'lucide-react';
+import {
+  ExternalLink,
+  GitBranch,
+  GitCommit,
+  Users,
+  Star,
+  Eye,
+  GitFork,
+} from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 interface GitHubResourceProps {
@@ -37,7 +45,10 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
           <CardContent>
             <div className="space-y-2">
               {data.files?.map((file: any, index: number) => (
-                <div key={index} className="flex items-center justify-between p-2 border rounded">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 border rounded"
+                >
                   <div className="flex items-center gap-2">
                     <span>{file.type === 'dir' ? '📁' : '📄'}</span>
                     <span className="font-mono text-sm">{file.name}</span>
@@ -80,7 +91,7 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <GitCommit className="h-5 w-5" />
+              <GitCommit className="size-5" />
               Recent Commits
             </CardTitle>
           </CardHeader>
@@ -99,8 +110,12 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                       <code className="text-xs bg-muted px-1 rounded">
                         {commit.sha.substring(0, 8)}
                       </code>
-                      <a href={commit.url} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="h-3 w-3" />
+                      <a
+                        href={commit.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="size-3" />
                       </a>
                     </div>
                   </div>
@@ -121,24 +136,32 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <p className="text-sm text-muted-foreground">{data.repository.description}</p>
-              
+              <p className="text-sm text-muted-foreground">
+                {data.repository.description}
+              </p>
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4" />
-                  <span className="text-sm">{data.repository.stargazers_count}</span>
+                  <Star className="size-4" />
+                  <span className="text-sm">
+                    {data.repository.stargazers_count}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <GitFork className="h-4 w-4" />
+                  <GitFork className="size-4" />
                   <span className="text-sm">{data.repository.forks_count}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  <span className="text-sm">{data.repository.watchers_count}</span>
+                  <Eye className="size-4" />
+                  <span className="text-sm">
+                    {data.repository.watchers_count}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  <span className="text-sm">{data.repository.open_issues_count} issues</span>
+                  <Users className="size-4" />
+                  <span className="text-sm">
+                    {data.repository.open_issues_count} issues
+                  </span>
                 </div>
               </div>
 
@@ -172,7 +195,7 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
     case 'list_pull_requests': {
       const items = data.issues || data.pull_requests;
       const title = action === 'list_issues' ? 'Issues' : 'Pull Requests';
-      
+
       return (
         <Card>
           <CardHeader>
@@ -186,7 +209,9 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                 <div key={index} className="border rounded p-3">
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
-                      <h4 className="font-medium text-sm">#{item.number} {item.title}</h4>
+                      <h4 className="font-medium text-sm">
+                        #{item.number} {item.title}
+                      </h4>
                       <p className="text-xs text-muted-foreground">
                         by {item.author} • {formatDate(item.created_at)}
                       </p>
@@ -197,18 +222,30 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={item.state === 'open' ? 'default' : 'secondary'}>
+                      <Badge
+                        variant={
+                          item.state === 'open' ? 'default' : 'secondary'
+                        }
+                      >
                         {item.state}
                       </Badge>
-                      <a href={item.url} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="h-3 w-3" />
+                      <a
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <ExternalLink className="size-3" />
                       </a>
                     </div>
                   </div>
                   {item.labels?.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-2">
                       {item.labels.map((label: string) => (
-                        <Badge key={label} variant="outline" className="text-xs">
+                        <Badge
+                          key={label}
+                          variant="outline"
+                          className="text-xs"
+                        >
                           {label}
                         </Badge>
                       ))}
@@ -227,21 +264,26 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <GitBranch className="h-5 w-5" />
+              <GitBranch className="size-5" />
               Branches
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               {data.branches?.map((branch: any, index: number) => (
-                <div key={index} className="flex items-center justify-between p-2 border rounded">
+                <div
+                  key={index}
+                  className="flex items-center justify-between p-2 border rounded"
+                >
                   <div className="flex items-center gap-2">
-                    <GitBranch className="h-4 w-4" />
+                    <GitBranch className="size-4" />
                     <span className="font-mono text-sm">{branch.name}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     {branch.protected && (
-                      <Badge variant="secondary" className="text-xs">Protected</Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        Protected
+                      </Badge>
                     )}
                     <code className="text-xs bg-muted px-1 rounded">
                       {branch.commit.sha.substring(0, 8)}
