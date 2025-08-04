@@ -38,6 +38,9 @@ export const queryGitHubResources = tool({
       'get_commit',
       'search_code',
       'get_readme',
+      'list_user_repos',
+      'list_org_repos',
+      'search_repos',
     ]),
     owner: z
       .string()
@@ -75,6 +78,38 @@ export const queryGitHubResources = tool({
       const owner = ownerParam || envOwner;
       const repo = repoParam || envRepo;
 
+      // Actions that require both owner and repo
+      const repoRequiredActions = [
+        'get_repository_info',
+        'list_files',
+        'get_file_content',
+        'list_commits',
+        'list_issues',
+        'list_pull_requests',
+        'list_branches',
+        'get_commit',
+        'search_code',
+        'get_readme',
+      ];
+
+      // Actions that only require owner
+      const ownerOnlyActions = ['list_user_repos', 'list_org_repos'];
+
+      // Actions that can work without specific owner/repo
+      const globalActions = ['search_repos'];
+
+      if (repoRequiredActions.includes(action) && (!owner || !repo)) {
+        throw new Error(
+          'GitHub owner and repository must be provided either as parameters or configured in environment variables',
+        );
+      }
+
+      if (ownerOnlyActions.includes(action) && !owner) {
+        throw new Error(
+          'GitHub owner must be provided either as parameter or configured in environment variables',
+        );
+      }
+
       if (!owner || !repo) {
         throw new Error(
           'GitHub owner and repository must be provided either as parameters or configured in environment variables',
@@ -84,8 +119,8 @@ export const queryGitHubResources = tool({
       switch (action) {
         case 'list_files': {
           const response = await octokit.rest.repos.getContent({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             path: path || '',
             ref: branch,
           });
@@ -138,8 +173,8 @@ export const queryGitHubResources = tool({
           }
 
           const response = await octokit.rest.repos.getContent({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             path,
             ref: branch,
           });
@@ -163,8 +198,8 @@ export const queryGitHubResources = tool({
 
         case 'list_commits': {
           const response = await octokit.rest.repos.listCommits({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             per_page: Math.min(limit ?? 30, 100),
             sha: branch,
           });
@@ -187,8 +222,8 @@ export const queryGitHubResources = tool({
           }
 
           const response = await octokit.rest.repos.getCommit({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             ref: sha,
           });
 
@@ -212,8 +247,8 @@ export const queryGitHubResources = tool({
 
         case 'list_issues': {
           const response = await octokit.rest.issues.listForRepo({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             state,
             per_page: Math.min(limit ?? 30, 100),
           });
@@ -238,8 +273,8 @@ export const queryGitHubResources = tool({
 
         case 'list_pull_requests': {
           const response = await octokit.rest.pulls.list({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             state,
             per_page: Math.min(limit ?? 30, 100),
           });
@@ -263,8 +298,8 @@ export const queryGitHubResources = tool({
 
         case 'get_repository_info': {
           const response = await octokit.rest.repos.get({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
           });
 
           return {
@@ -317,8 +352,8 @@ export const queryGitHubResources = tool({
 
         case 'list_branches': {
           const response = await octokit.rest.repos.listBranches({
-            owner,
-            repo,
+            owner: owner,
+            repo: repo,
             per_page: Math.min(limit ?? 30, 100),
           });
 
@@ -338,8 +373,8 @@ export const queryGitHubResources = tool({
         case 'get_readme': {
           try {
             const response = await octokit.rest.repos.getReadme({
-              owner,
-              repo,
+              owner: owner,
+              repo: repo,
               ref: branch,
             });
 
@@ -366,6 +401,120 @@ export const queryGitHubResources = tool({
             }
             throw error;
           }
+        }
+
+        case 'list_user_repos': {
+          if (!owner) {
+            throw new Error('Owner is required for list_user_repos action');
+          }
+
+          const response = await octokit.rest.repos.listForUser({
+            username: owner,
+            per_page: Math.min(limit ?? 30, 100),
+            sort: 'updated',
+            direction: 'desc',
+          });
+
+          return {
+            action,
+            owner,
+            repositories: response.data.map((repo) => ({
+              name: repo.name,
+              full_name: repo.full_name,
+              description: repo.description,
+              private: repo.private,
+              fork: repo.fork,
+              language: repo.language,
+              stargazers_count: repo.stargazers_count,
+              watchers_count: repo.watchers_count,
+              forks_count: repo.forks_count,
+              open_issues_count: repo.open_issues_count,
+              default_branch: repo.default_branch,
+              created_at: repo.created_at,
+              updated_at: repo.updated_at,
+              url: repo.html_url,
+            })),
+            total_count: response.data.length,
+          };
+        }
+
+        case 'list_org_repos': {
+          if (!owner) {
+            throw new Error(
+              'Organization name is required for list_org_repos action',
+            );
+          }
+
+          const response = await octokit.rest.repos.listForOrg({
+            org: owner,
+            per_page: Math.min(limit ?? 30, 100),
+            sort: 'updated',
+            direction: 'desc',
+          });
+
+          return {
+            action,
+            organization: owner,
+            repositories: response.data.map((repo) => ({
+              name: repo.name,
+              full_name: repo.full_name,
+              description: repo.description,
+              private: repo.private,
+              fork: repo.fork,
+              language: repo.language,
+              stargazers_count: repo.stargazers_count,
+              watchers_count: repo.watchers_count,
+              forks_count: repo.forks_count,
+              open_issues_count: repo.open_issues_count,
+              default_branch: repo.default_branch,
+              created_at: repo.created_at,
+              updated_at: repo.updated_at,
+              url: repo.html_url,
+            })),
+            total_count: response.data.length,
+          };
+        }
+
+        case 'search_repos': {
+          if (!query) {
+            throw new Error('Query is required for search_repos action');
+          }
+
+          // Build search query with optional filters
+          let searchQuery = query;
+          if (owner) {
+            searchQuery += ` user:${owner}`;
+          }
+
+          const response = await octokit.rest.search.repos({
+            q: searchQuery,
+            per_page: Math.min(limit ?? 30, 100),
+            sort: 'updated',
+            order: 'desc',
+          });
+
+          return {
+            action,
+            query: searchQuery,
+            repositories: response.data.items.map((repo) => ({
+              name: repo.name,
+              full_name: repo.full_name,
+              description: repo.description,
+              private: repo.private,
+              fork: repo.fork,
+              language: repo.language,
+              stargazers_count: repo.stargazers_count,
+              watchers_count: repo.watchers_count,
+              forks_count: repo.forks_count,
+              open_issues_count: repo.open_issues_count,
+              default_branch: repo.default_branch,
+              created_at: repo.created_at,
+              updated_at: repo.updated_at,
+              url: repo.html_url,
+              score: repo.score,
+            })),
+            total_count: response.data.total_count,
+          };
         }
 
         default:

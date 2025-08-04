@@ -20,14 +20,15 @@ function PureSuggestedActions({
 }: SuggestedActionsProps) {
   const suggestedActions = [
     {
-      title: 'Please list all',
-      label: 'of my AWS Stacks',
-      action: 'Please list all of my AWS Stacks',
+      title: 'Hey agent, can you tell me the latest version of',
+      label: 'the nextjs-ai-chatbot repo and who last modified it?',
+      action:
+        'Hey agent, can you tell me the latest version of the nextjs-ai-chatbot repo and who last modified it?',
     },
     {
-      title: 'Please list all',
-      label: `of my Log Groups`,
-      action: `Please list all of my Log Groups`,
+      title: 'What permissions I need to ',
+      label: 'work on sc-haystack stack',
+      action: 'What permissions do I need to work on the sc-haystack stack?',
     },
     {
       title: 'Can you explain the',

@@ -39,7 +39,7 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              📁 Files in {data.path}
+              📁 Files in {data.path || 'Unknown path'}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -69,17 +69,17 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              📄 {data.path}
+              📄 {data.path || 'Unknown file'}
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
               <div className="flex gap-2 text-xs text-muted-foreground">
-                <span>Size: {data.size} bytes</span>
+                <span>Size: {data.size || 0} bytes</span>
                 <span>SHA: {data.sha?.substring(0, 8)}</span>
               </div>
               <pre className="bg-muted p-4 rounded text-sm overflow-x-auto max-h-96">
-                <code>{data.content}</code>
+                <code>{data.content || 'No content available'}</code>
               </pre>
             </div>
           </CardContent>
@@ -101,22 +101,29 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                 <div key={index} className="border-l-2 border-muted pl-4">
                   <div className="flex items-start justify-between">
                     <div>
-                      <p className="font-medium text-sm">{commit.message}</p>
+                      <p className="font-medium text-sm">
+                        {commit.message || 'No message'}
+                      </p>
                       <p className="text-xs text-muted-foreground">
-                        by {commit.author?.name} • {formatDate(commit.date)}
+                        by {commit.author?.name || 'Unknown'} •{' '}
+                        {commit.date ? formatDate(commit.date) : 'Unknown date'}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <code className="text-xs bg-muted px-1 rounded">
-                        {commit.sha.substring(0, 8)}
-                      </code>
-                      <a
-                        href={commit.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="size-3" />
-                      </a>
+                      {commit.sha && (
+                        <code className="text-xs bg-muted px-1 rounded">
+                          {commit.sha.substring(0, 8)}
+                        </code>
+                      )}
+                      {commit.url && (
+                        <a
+                          href={commit.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="size-3" />
+                        </a>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -127,6 +134,18 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
       );
 
     case 'get_repository_info':
+      if (!data.repository) {
+        return (
+          <Card className="border-destructive">
+            <CardContent className="pt-6">
+              <p className="text-sm text-destructive">
+                Repository information not available
+              </p>
+            </CardContent>
+          </Card>
+        );
+      }
+
       return (
         <Card>
           <CardHeader>
@@ -144,23 +163,25 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                 <div className="flex items-center gap-2">
                   <Star className="size-4" />
                   <span className="text-sm">
-                    {data.repository.stargazers_count}
+                    {data.repository.stargazers_count || 0}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <GitFork className="size-4" />
-                  <span className="text-sm">{data.repository.forks_count}</span>
+                  <span className="text-sm">
+                    {data.repository.forks_count || 0}
+                  </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Eye className="size-4" />
                   <span className="text-sm">
-                    {data.repository.watchers_count}
+                    {data.repository.watchers_count || 0}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Users className="size-4" />
                   <span className="text-sm">
-                    {data.repository.open_issues_count} issues
+                    {data.repository.open_issues_count || 0} issues
                   </span>
                 </div>
               </div>
@@ -172,9 +193,11 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                 {data.repository.license && (
                   <Badge variant="outline">{data.repository.license}</Badge>
                 )}
-                <Badge variant="outline">
-                  Default: {data.repository.default_branch}
-                </Badge>
+                {data.repository.default_branch && (
+                  <Badge variant="outline">
+                    Default: {data.repository.default_branch}
+                  </Badge>
+                )}
               </div>
 
               {data.repository.topics?.length > 0 && (
@@ -210,10 +233,13 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
                       <h4 className="font-medium text-sm">
-                        #{item.number} {item.title}
+                        #{item.number || 'N/A'} {item.title || 'No title'}
                       </h4>
                       <p className="text-xs text-muted-foreground">
-                        by {item.author} • {formatDate(item.created_at)}
+                        by {item.author || 'Unknown'} •{' '}
+                        {item.created_at
+                          ? formatDate(item.created_at)
+                          : 'Unknown date'}
                       </p>
                       {item.body && (
                         <p className="text-xs text-muted-foreground line-clamp-2">
@@ -227,15 +253,17 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                           item.state === 'open' ? 'default' : 'secondary'
                         }
                       >
-                        {item.state}
+                        {item.state || 'unknown'}
                       </Badge>
-                      <a
-                        href={item.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="size-3" />
-                      </a>
+                      {item.url && (
+                        <a
+                          href={item.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="size-3" />
+                        </a>
+                      )}
                     </div>
                   </div>
                   {item.labels?.length > 0 && (
@@ -277,7 +305,9 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                 >
                   <div className="flex items-center gap-2">
                     <GitBranch className="size-4" />
-                    <span className="font-mono text-sm">{branch.name}</span>
+                    <span className="font-mono text-sm">
+                      {branch.name || 'Unknown branch'}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                     {branch.protected && (
@@ -285,9 +315,247 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
                         Protected
                       </Badge>
                     )}
-                    <code className="text-xs bg-muted px-1 rounded">
-                      {branch.commit.sha.substring(0, 8)}
-                    </code>
+                    {branch.commit?.sha && (
+                      <code className="text-xs bg-muted px-1 rounded">
+                        {branch.commit.sha.substring(0, 8)}
+                      </code>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      );
+
+    case 'list_user_repos':
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              👤 {data.owner} Repositories
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {data.total_count} repositories found
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {data.repositories?.map((repo: any, index: number) => (
+                <div key={index} className="border rounded p-4 space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="font-semibold text-sm">
+                        <a
+                          href={repo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline flex items-center gap-1"
+                        >
+                          {repo.full_name}
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </h3>
+                      {repo.description && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {repo.description}
+                        </p>
+                      )}
+                    </div>
+                    {repo.private && (
+                      <Badge variant="secondary" className="text-xs">
+                        Private
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {repo.language && (
+                      <Badge variant="outline" className="text-xs">
+                        {repo.language}
+                      </Badge>
+                    )}
+                    {repo.fork && (
+                      <Badge variant="outline" className="text-xs">
+                        Fork
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Star className="size-3" />
+                      <span>{repo.stargazers_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <GitFork className="size-3" />
+                      <span>{repo.forks_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="size-3" />
+                      <span>{repo.watchers_count || 0}</span>
+                    </div>
+                    <span>Updated {formatDate(repo.updated_at)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      );
+
+    case 'list_org_repos':
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              🏢 {data.organization} Repositories
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {data.total_count} repositories found
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {data.repositories?.map((repo: any, index: number) => (
+                <div key={index} className="border rounded p-4 space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="font-semibold text-sm">
+                        <a
+                          href={repo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline flex items-center gap-1"
+                        >
+                          {repo.full_name}
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </h3>
+                      {repo.description && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {repo.description}
+                        </p>
+                      )}
+                    </div>
+                    {repo.private && (
+                      <Badge variant="secondary" className="text-xs">
+                        Private
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {repo.language && (
+                      <Badge variant="outline" className="text-xs">
+                        {repo.language}
+                      </Badge>
+                    )}
+                    {repo.fork && (
+                      <Badge variant="outline" className="text-xs">
+                        Fork
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Star className="size-3" />
+                      <span>{repo.stargazers_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <GitFork className="size-3" />
+                      <span>{repo.forks_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="size-3" />
+                      <span>{repo.watchers_count || 0}</span>
+                    </div>
+                    <span>Updated {formatDate(repo.updated_at)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      );
+
+    case 'search_repos':
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              🔍 Repository Search Results
+            </CardTitle>
+            <p className="text-sm text-muted-foreground">
+              {data.total_count} repositories found for &ldquo;{data.query}
+              &rdquo;
+            </p>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {data.repositories?.map((repo: any, index: number) => (
+                <div key={index} className="border rounded p-4 space-y-2">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h3 className="font-semibold text-sm">
+                        <a
+                          href={repo.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline flex items-center gap-1"
+                        >
+                          {repo.full_name}
+                          <ExternalLink className="size-3" />
+                        </a>
+                      </h3>
+                      {repo.description && (
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {repo.description}
+                        </p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {repo.private && (
+                        <Badge variant="secondary" className="text-xs">
+                          Private
+                        </Badge>
+                      )}
+                      {repo.score && (
+                        <Badge variant="outline" className="text-xs">
+                          Score: {repo.score.toFixed(1)}
+                        </Badge>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap gap-2">
+                    {repo.language && (
+                      <Badge variant="outline" className="text-xs">
+                        {repo.language}
+                      </Badge>
+                    )}
+                    {repo.fork && (
+                      <Badge variant="outline" className="text-xs">
+                        Fork
+                      </Badge>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Star className="size-3" />
+                      <span>{repo.stargazers_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <GitFork className="size-3" />
+                      <span>{repo.forks_count || 0}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="size-3" />
+                      <span>{repo.watchers_count || 0}</span>
+                    </div>
+                    <span>Updated {formatDate(repo.updated_at)}</span>
                   </div>
                 </div>
               ))}
