@@ -12,6 +12,7 @@ import { memo } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { type VisibilityType, VisibilitySelector } from './visibility-selector';
 import type { Session } from 'next-auth';
+import { AWSAccountInfo } from './aws-account-info';
 
 function PureChatHeader({
   chatId,
@@ -69,6 +70,10 @@ function PureChatHeader({
           className="order-1 md:order-3"
         />
       )}
+
+      <div className="ml-auto order-4">
+        <AWSAccountInfo />
+      </div>
     </header>
   );
 }

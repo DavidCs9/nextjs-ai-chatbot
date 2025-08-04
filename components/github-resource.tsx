@@ -169,7 +169,7 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
       );
 
     case 'list_issues':
-    case 'list_pull_requests':
+    case 'list_pull_requests': {
       const items = data.issues || data.pull_requests;
       const title = action === 'list_issues' ? 'Issues' : 'Pull Requests';
       
@@ -220,6 +220,7 @@ export const GitHubResource = ({ action, data }: GitHubResourceProps) => {
           </CardContent>
         </Card>
       );
+    }
 
     case 'list_branches':
       return (

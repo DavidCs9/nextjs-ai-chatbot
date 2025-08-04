@@ -238,7 +238,7 @@ export const queryAWSResources = tool({
             (response.Buckets || []).map(async (bucket) => {
               try {
                 const locationCommand = new GetBucketLocationCommand({
-                  Bucket: bucket.Name!,
+                  Bucket: bucket.Name || '',
                 });
                 const locationResponse = await s3.send(locationCommand);
                 return {

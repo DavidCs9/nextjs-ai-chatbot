@@ -25,19 +25,14 @@ function PureSuggestedActions({
       action: 'Please list all of my AWS Stacks',
     },
     {
-      title: 'Can you describe the ecoviz',
-      label: `serverless lambda function?`,
-      action: `Can you describe the ecoviz serverless lambda function?`,
-    },
-    {
       title: 'Please list all',
       label: `of my Log Groups`,
       action: `Please list all of my Log Groups`,
     },
     {
-      title: 'Can you tell me about',
-      label: 'the ecoviz serverless stack',
-      action: 'Can you tell me about the ecoviz serverless stack?',
+      title: 'Can you explain the',
+      label: 'the sc-haystack-sandbox stack',
+      action: 'Can you explain the sc-haystack-sandbox stack?',
     },
     {
       title: 'Show me the repository',
