@@ -154,11 +154,12 @@ export async function POST(request: Request) {
 
     const stream = createUIMessageStream({
       execute: ({ writer: dataStream }) => {
+        const MAX_STEP_COUNT = 10;
         const result = streamText({
           model: myProvider.languageModel(selectedChatModel),
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: convertToModelMessages(uiMessages),
-          stopWhen: stepCountIs(5),
+          stopWhen: stepCountIs(MAX_STEP_COUNT),
           experimental_activeTools:
             selectedChatModel === 'chat-model-reasoning'
               ? []
