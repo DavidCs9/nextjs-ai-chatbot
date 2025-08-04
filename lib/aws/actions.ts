@@ -25,7 +25,7 @@ export async function getAWSAccountInfo(): Promise<AWSAccountInfo> {
     const stsClient = createSTSClient();
     const command = new GetCallerIdentityCommand({});
     const response = await stsClient.send(command);
-    
+
     return {
       success: true,
       accountId: response.Account,
@@ -34,14 +34,18 @@ export async function getAWSAccountInfo(): Promise<AWSAccountInfo> {
       region: process.env.AWS_DEFAULT_REGION || 'eu-west-1',
     };
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
-    
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error occurred';
+
     // Check for common credential-related errors
-    const isCredentialError = errorMessage.includes('Unable to locate credentials') ||
-                             errorMessage.includes('The security token included in the request is invalid') ||
-                             errorMessage.includes('Token has expired') ||
-                             errorMessage.includes('credentials') ||
-                             errorMessage.includes('ExpiredToken');
+    const isCredentialError =
+      errorMessage.includes('Unable to locate credentials') ||
+      errorMessage.includes(
+        'The security token included in the request is invalid',
+      ) ||
+      errorMessage.includes('Token has expired') ||
+      errorMessage.includes('credentials') ||
+      errorMessage.includes('ExpiredToken');
 
     return {
       success: false,

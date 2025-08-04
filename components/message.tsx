@@ -320,45 +320,40 @@ const PurePreviewMessage = ({
                     </div>
                   );
                 }
-              
-                if (type === 'tool-queryGitHubResources') {
-                const { toolCallId, state } = part;
-
-                  if (state === 'input-available') {
-                    return (
-                      <div key={toolCallId}>
-                        <GitHubResource isLoading={true} />
-                      </div>
-                    );
-                  }
-
-                  if (state === 'output-available') {
-                    const { output } = part;
-                    return (
-                      <div key={toolCallId}>
-                        <GitHubResource data={output} />
-                      </div>
-                    );
-                  }
-                }
-              }
-
-              if (type === 'tool-queryAWSResources') {
-                const { toolCallId, state } = part;
-
-                if (state === 'input-available') {
-                  return (
-                    <div key={toolCallId}>
-                      <AWSResource isLoading={true} />
-                    </div>
-                  );
-                }
 
                 if (state === 'output-available') {
                   const { output } = part;
                   return (
                     <div key={toolCallId}>
                       <AWSResource data={output} />
+                    </div>
+                  );
+                }
+              }
+
+              if (type === 'tool-queryGitHubResources') {
+                const { toolCallId, state } = part;
+
+                if (state === 'input-available') {
+                  const { input } = part;
+                  return (
+                    <div key={toolCallId}>
+                      <GitHubResource
+                        action={input.action || 'query'}
+                        data={{ loading: true }}
+                      />
+                    </div>
+                  );
+                }
+
+                if (state === 'output-available') {
+                  const { input, output } = part;
+                  return (
+                    <div key={toolCallId}>
+                      <GitHubResource
+                        action={input.action || 'query'}
+                        data={output}
+                      />
                     </div>
                   );
                 }

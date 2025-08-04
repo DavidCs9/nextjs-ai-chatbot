@@ -1173,7 +1173,10 @@ export const WarningIcon = ({ size = 16 }: { size?: number }) => {
   );
 };
 
-export const CheckCircleIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+export const CheckCircleIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => {
   return (
     <svg
       height={size}
@@ -1193,7 +1196,10 @@ export const CheckCircleIcon = ({ size = 16, className }: { size?: number; class
   );
 };
 
-export const AlertCircleIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+export const AlertCircleIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => {
   return (
     <svg
       height={size}
@@ -1213,7 +1219,10 @@ export const AlertCircleIcon = ({ size = 16, className }: { size?: number; class
   );
 };
 
-export const XCircleIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+export const XCircleIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => {
   return (
     <svg
       height={size}
@@ -1233,7 +1242,10 @@ export const XCircleIcon = ({ size = 16, className }: { size?: number; className
   );
 };
 
-export const ClockIcon = ({ size = 16, className }: { size?: number; className?: string }) => {
+export const ClockIcon = ({
+  size = 16,
+  className,
+}: { size?: number; className?: string }) => {
   return (
     <svg
       height={size}

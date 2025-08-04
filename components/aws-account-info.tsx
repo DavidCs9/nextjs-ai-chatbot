@@ -38,13 +38,17 @@ export function AWSAccountInfo() {
               disabled={isRefreshing}
               className="size-6 p-0"
             >
-              <RefreshCwIcon className={`size-3 ${isRefreshing ? 'animate-spin' : ''}`} />
+              <RefreshCwIcon
+                className={`size-3 ${isRefreshing ? 'animate-spin' : ''}`}
+              />
             </Button>
           </div>
         </TooltipTrigger>
         <TooltipContent side="bottom" className="max-w-xs">
           <div className="space-y-2">
-            <p className="font-medium text-destructive">AWS Connection Failed</p>
+            <p className="font-medium text-destructive">
+              AWS Connection Failed
+            </p>
             {accountInfo?.isCredentialError ? (
               <div className="space-y-1">
                 <p className="text-sm">Credential issue detected</p>
@@ -75,24 +79,24 @@ export function AWSAccountInfo() {
   // Extract account alias or role name from ARN
   const extractRoleInfo = (arn?: string) => {
     if (!arn) return null;
-    
+
     // For assumed roles: arn:aws:sts::123456789012:assumed-role/RoleName/SessionName
     const assumedRoleMatch = arn.match(/assumed-role\/([^\/]+)/);
     if (assumedRoleMatch) {
       return { type: 'Role', name: assumedRoleMatch[1] };
     }
-    
+
     // For IAM users: arn:aws:iam::123456789012:user/UserName
     const userMatch = arn.match(/user\/(.+)$/);
     if (userMatch) {
       return { type: 'User', name: userMatch[1] };
     }
-    
+
     // For root: arn:aws:iam::123456789012:root
     if (arn.includes(':root')) {
       return { type: 'Root', name: 'Root User' };
     }
-    
+
     return null;
   };
 
@@ -104,7 +108,9 @@ export function AWSAccountInfo() {
         <div className="flex items-center gap-2 cursor-pointer">
           <CloudIcon className="size-4 text-emerald-600" />
           <Badge variant="secondary" className="text-xs font-mono">
-            {accountInfo.accountId ? formatAccountId(accountInfo.accountId) : 'Unknown'}
+            {accountInfo.accountId
+              ? formatAccountId(accountInfo.accountId)
+              : 'Unknown'}
           </Badge>
           <Button
             variant="ghost"
@@ -113,7 +119,9 @@ export function AWSAccountInfo() {
             disabled={isRefreshing}
             className="size-6 p-0"
           >
-            <RefreshCwIcon className={`size-3 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <RefreshCwIcon
+              className={`size-3 ${isRefreshing ? 'animate-spin' : ''}`}
+            />
           </Button>
         </div>
       </TooltipTrigger>
@@ -123,35 +131,44 @@ export function AWSAccountInfo() {
             <CloudIcon className="size-4 text-emerald-600" />
             <span className="font-medium">AWS Account Connected</span>
           </div>
-          
+
           <div className="space-y-2 text-sm">
             <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2">
               <span className="text-muted-foreground">Account ID:</span>
               <span className="font-mono">{accountInfo.accountId}</span>
-              
+
               <span className="text-muted-foreground">Region:</span>
               <span>{accountInfo.region}</span>
-              
+
               {roleInfo && (
                 <>
-                  <span className="text-muted-foreground">{roleInfo.type}:</span>
+                  <span className="text-muted-foreground">
+                    {roleInfo.type}:
+                  </span>
                   <span className="font-medium truncate" title={roleInfo.name}>
-                    {roleInfo.name.length > 30 ? `${roleInfo.name.slice(0, 30)}...` : roleInfo.name}
+                    {roleInfo.name.length > 30
+                      ? `${roleInfo.name.slice(0, 30)}...`
+                      : roleInfo.name}
                   </span>
                 </>
               )}
-              
+
               {accountInfo.userId && (
                 <>
                   <span className="text-muted-foreground">User ID:</span>
-                  <span className="font-mono text-xs truncate" title={accountInfo.userId}>
-                    {accountInfo.userId.length > 30 ? `${accountInfo.userId.slice(0, 30)}...` : accountInfo.userId}
+                  <span
+                    className="font-mono text-xs truncate"
+                    title={accountInfo.userId}
+                  >
+                    {accountInfo.userId.length > 30
+                      ? `${accountInfo.userId.slice(0, 30)}...`
+                      : accountInfo.userId}
                   </span>
                 </>
               )}
             </div>
           </div>
-          
+
           {accountInfo.arn && (
             <div className="border-t pt-2">
               <p className="text-xs text-muted-foreground mb-1">ARN:</p>

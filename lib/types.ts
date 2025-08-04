@@ -4,6 +4,7 @@ import type { createDocument } from './ai/tools/create-document';
 import type { updateDocument } from './ai/tools/update-document';
 import type { requestSuggestions } from './ai/tools/request-suggestions';
 import type { queryAWSResources } from './ai/tools/query-aws-resources';
+import type { queryGitHubResources } from './ai/tools/query-github-resources';
 import type { InferUITool, UIMessage } from 'ai';
 
 import type { ArtifactKind } from '@/components/artifact';
@@ -24,6 +25,7 @@ type requestSuggestionsTool = InferUITool<
   ReturnType<typeof requestSuggestions>
 >;
 type queryAWSResourcesTool = InferUITool<typeof queryAWSResources>;
+type queryGitHubResourcesTool = InferUITool<typeof queryGitHubResources>;
 
 export type ChatTools = {
   getWeather: weatherTool;
@@ -31,6 +33,7 @@ export type ChatTools = {
   updateDocument: updateDocumentTool;
   requestSuggestions: requestSuggestionsTool;
   queryAWSResources: queryAWSResourcesTool;
+  queryGitHubResources: queryGitHubResourcesTool;
 };
 
 export type CustomUIDataTypes = {
