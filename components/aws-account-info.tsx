@@ -125,35 +125,39 @@ export function AWSAccountInfo() {
           </div>
           
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
+            <div className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2">
               <span className="text-muted-foreground">Account ID:</span>
               <span className="font-mono">{accountInfo.accountId}</span>
-            </div>
-            
-            <div className="flex justify-between">
+              
               <span className="text-muted-foreground">Region:</span>
               <span>{accountInfo.region}</span>
+              
+              {roleInfo && (
+                <>
+                  <span className="text-muted-foreground">{roleInfo.type}:</span>
+                  <span className="font-medium truncate" title={roleInfo.name}>
+                    {roleInfo.name.length > 30 ? `${roleInfo.name.slice(0, 30)}...` : roleInfo.name}
+                  </span>
+                </>
+              )}
+              
+              {accountInfo.userId && (
+                <>
+                  <span className="text-muted-foreground">User ID:</span>
+                  <span className="font-mono text-xs truncate" title={accountInfo.userId}>
+                    {accountInfo.userId.length > 30 ? `${accountInfo.userId.slice(0, 30)}...` : accountInfo.userId}
+                  </span>
+                </>
+              )}
             </div>
-            
-            {roleInfo && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">{roleInfo.type}:</span>
-                <span className="font-medium">{roleInfo.name}</span>
-              </div>
-            )}
-            
-            {accountInfo.userId && (
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">User ID:</span>
-                <span className="font-mono text-xs">{accountInfo.userId}</span>
-              </div>
-            )}
           </div>
           
           {accountInfo.arn && (
             <div className="border-t pt-2">
-              <p className="text-xs text-muted-foreground">ARN:</p>
-              <p className="text-xs font-mono break-all">{accountInfo.arn}</p>
+              <p className="text-xs text-muted-foreground mb-1">ARN:</p>
+              <p className="text-xs font-mono break-all bg-muted/50 p-2 rounded text-foreground/80">
+                {accountInfo.arn}
+              </p>
             </div>
           )}
         </div>
