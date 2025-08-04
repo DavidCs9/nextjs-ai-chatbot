@@ -125,7 +125,7 @@ export function AWSAccountInfo() {
           </Button>
         </div>
       </TooltipTrigger>
-      <TooltipContent side="bottom" className="max-w-sm">
+      <TooltipContent side="bottom" className="max-w-sm z-50">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
             <CloudIcon className="size-4 text-emerald-600" />
