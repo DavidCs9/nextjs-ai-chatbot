@@ -85,7 +85,13 @@ AWS_DEFAULT_REGION=eu-west-1
 
 ### 4. Database Setup
 
-#### Option A: Local PostgreSQL
+### Option A: Docker
+
+1. Docker needs to be installed (Docker Destop >= 4.43.2 or Docker Engine >= 28.3.2)
+2. At the root directory run `pnpm docker:dev:up`.
+3. Once you are done, remember to `pnpm docker:down`.
+
+#### Option B: Local PostgreSQL
 
 1. Install PostgreSQL locally
 2. Create a new database:
@@ -94,7 +100,7 @@ AWS_DEFAULT_REGION=eu-west-1
    ```
 3. Update `POSTGRES_URL` in `.env.local`
 
-#### Option B: Cloud Database (Recommended)
+#### Option C: Cloud Database
 
 Use a cloud provider like:
 
@@ -113,6 +119,37 @@ pnpm db:migrate
 
 ```bash
 pnpm dev
+```
+
+### 7. Start Local Production Server
+
+#### Create .env.production.local
+
+```bash
+# Authentication Secret (generate with: openssl rand -base64 32)
+AUTH_SECRET=your_random_32_character_secret
+
+# OpenAI API Key (get from: https://platform.openai.com/api-keys)
+OPENAI_API_KEY=sk-your_openai_api_key
+
+# PostgreSQL Database URL
+POSTGRES_URL=postgresql://username:password@postgres:5432/chatbot_db
+
+# Vercel Blob Storage (for file uploads)
+BLOB_READ_WRITE_TOKEN=your_vercel_blob_token
+
+# Redis (for caching and sessions)
+REDIS_URL=redis://redis:6379
+
+# AWS
+AWS_ACCESS_KEY_ID=your_aws_access_key
+AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+AWS_SESSION_TOKEN=your_aws_session_token  # if using temporary credentials
+AWS_DEFAULT_REGION=eu-west-1
+```
+
+```bash
+pnpm docker:local-prod:up
 ```
 
 The application will be available at [http://localhost:3000](http://localhost:3000)
