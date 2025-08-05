@@ -39,6 +39,7 @@ import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
 import type { ChatModel } from '@/lib/ai/models';
 import type { VisibilityType } from '@/components/visibility-selector';
+import { getJiraTools } from '@/lib/ai/tools/jira-tools';
 
 export const maxDuration = 60;
 
@@ -152,6 +153,9 @@ export async function POST(request: Request) {
     const streamId = generateUUID();
     await createStreamId({ streamId, chatId: id });
 
+    // Get Jira tools asynchronously with proper error handling
+    const jiraToolsResolved = await getJiraTools();
+
     const stream = createUIMessageStream({
       execute: ({ writer: dataStream }) => {
         const MAX_STEP_COUNT = 10;
@@ -182,6 +186,7 @@ export async function POST(request: Request) {
             }),
             queryAWSResources,
             queryGitHubResources,
+            ...jiraToolsResolved,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
