@@ -1,7 +1,6 @@
 import { experimental_createMCPClient as createMCPClient } from 'ai';
 import { Experimental_StdioMCPTransport as StdioMCPTransport } from 'ai/mcp-stdio';
 import type { experimental_MCPClient } from 'ai';
-
 // Initialize MCP client with proper error handling
 let mcpClient: experimental_MCPClient | null = null;
 

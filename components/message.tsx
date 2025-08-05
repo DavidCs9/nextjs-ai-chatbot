@@ -11,6 +11,7 @@ import { PreviewAttachment } from './preview-attachment';
 import { Weather } from './weather';
 import { AWSResource } from './aws-resource';
 import { GitHubResource } from './github-resource';
+import { JiraResource } from './jira-resource';
 import equal from 'fast-deep-equal';
 import { cn, sanitizeText } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -21,6 +22,34 @@ import { MessageReasoning } from './message-reasoning';
 import type { UseChatHelpers } from '@ai-sdk/react';
 import type { ChatMessage } from '@/lib/types';
 import { useDataStream } from './data-stream-provider';
+
+const JIRA_TOOLS_NAMES = [
+  'atlassianUserInfo',
+  'getAccessibleAtlassianResources',
+  'getConfluenceSpaces',
+  'getConfluencePage',
+  'getPagesInConfluenceSpace',
+  'getConfluencePageAncestors',
+  'getConfluencePageFooterComments',
+  'getConfluencePageInlineComments',
+  'getConfluencePageDescendants',
+  'createConfluencePage',
+  'updateConfluencePage',
+  'createConfluenceFooterComment',
+  'createConfluenceInlineComment',
+  'searchConfluenceUsingCql',
+  'getJiraIssue',
+  'editJiraIssue',
+  'createJiraIssue',
+  'getTransitionsForJiraIssue',
+  'transitionJiraIssue',
+  'lookupJiraAccountId',
+  'searchJiraIssuesUsingJql',
+  'addCommentToJiraIssue',
+  'getJiraIssueRemoteIssueLinks',
+  'getVisibleJiraProjects',
+  'getJiraProjectIssueTypesMetadata',
+];
 
 // Type narrowing is handled by TypeScript's control flow analysis
 // The AI SDK provides proper discriminated unions for tool calls
@@ -356,6 +385,70 @@ const PurePreviewMessage = ({
                       />
                     </div>
                   );
+                }
+              }
+
+              // Handle dynamic JIRA tools
+              if (
+                type === 'dynamic-tool' &&
+                JIRA_TOOLS_NAMES.includes(part.toolName)
+              ) {
+                const { toolCallId, state, toolName } = part;
+
+                if (state === 'input-available') {
+                  const { input } = part;
+                  return (
+                    <div key={toolCallId}>
+                      <JiraResource
+                        action={toolName}
+                        data={{ loading: true }}
+                        isLoading={true}
+                      />
+                    </div>
+                  );
+                }
+
+                if (state === 'output-available') {
+                  const { input, output } = part;
+                  return (
+                    <div key={toolCallId}>
+                      <JiraResource action={toolName} data={output} />
+                    </div>
+                  );
+                }
+              }
+
+              // Handle any tool call that contains 'jira' (fallback)
+              if (
+                type.includes('tool') &&
+                (type.includes('jira') ||
+                  ('toolName' in part && part.toolName?.includes('jira')))
+              ) {
+                if ('toolCallId' in part && 'state' in part) {
+                  const { toolCallId, state } = part;
+                  const toolName = 'toolName' in part ? part.toolName : type;
+
+                  if (state === 'input-available') {
+                    const input = 'input' in part ? part.input : {};
+                    return (
+                      <div key={toolCallId}>
+                        <JiraResource
+                          action={toolName}
+                          data={{ loading: true }}
+                          isLoading={true}
+                        />
+                      </div>
+                    );
+                  }
+
+                  if (state === 'output-available') {
+                    const output = 'output' in part ? part.output : {};
+                    return (
+                      <div key={toolCallId}>
+                        <JiraResource action={toolName} data={output} />
+                      </div>
+                    );
+                  }
                 }
               }
             })}

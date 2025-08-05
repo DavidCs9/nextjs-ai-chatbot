@@ -155,7 +155,6 @@ export async function POST(request: Request) {
 
     // Get Jira tools asynchronously with proper error handling
     const jiraToolsResolved = await getJiraTools();
-
     const stream = createUIMessageStream({
       execute: ({ writer: dataStream }) => {
         const MAX_STEP_COUNT = 10;
