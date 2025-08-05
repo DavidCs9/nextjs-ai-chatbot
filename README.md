@@ -85,7 +85,7 @@ AWS_DEFAULT_REGION=eu-west-1
 
 ### 4. Database Setup
 
-### Option A: Docker
+#### Option A: Docker
 
 1. Docker needs to be installed (Docker Destop >= 4.43.2 or Docker Engine >= 28.3.2)
 2. At the root directory run `pnpm docker:dev:up`.
@@ -121,9 +121,11 @@ pnpm db:migrate
 pnpm dev
 ```
 
+The application will be available at [http://localhost:3000](http://localhost:3000)
+
 ### 7. Start Local Production Server
 
-#### Create .env.production.local
+#### 7.1 Create .env.production.local
 
 ```bash
 # Authentication Secret (generate with: openssl rand -base64 32)
@@ -147,6 +149,8 @@ AWS_SECRET_ACCESS_KEY=your_aws_secret_key
 AWS_SESSION_TOKEN=your_aws_session_token  # if using temporary credentials
 AWS_DEFAULT_REGION=eu-west-1
 ```
+
+#### 7.2 Run from root of project
 
 ```bash
 pnpm docker:local-prod:up
