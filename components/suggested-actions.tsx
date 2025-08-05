@@ -20,35 +20,33 @@ function PureSuggestedActions({
 }: SuggestedActionsProps) {
   const suggestedActions = [
     {
-      title: 'Hey agent, can you tell me the latest version of',
-      label: 'the nextjs-ai-chatbot repo and who last modified it?',
+      title: 'Show me all open issues',
+      label: 'assigned to me in JIRA',
+      action: 'Show me all open issues assigned to me across all JIRA projects',
+    },
+    {
+      title: 'What are the latest commits',
+      label: 'in the nextjs-ai-chatbot repo?',
       action:
-        'Hey agent, can you tell me the latest version of the nextjs-ai-chatbot repo and who last modified it?',
+        'What are the latest commits in the nextjs-ai-chatbot repository and who made them?',
     },
     {
-      title: 'What permissions I need to ',
-      label: 'work on sc-haystack stack',
-      action: 'What permissions do I need to work on the sc-haystack stack?',
+      title: 'List my AWS CloudFormation',
+      label: 'stacks and their status',
+      action:
+        'List all my AWS CloudFormation stacks and show their current status',
     },
     {
-      title: 'Can you explain the',
-      label: 'the sc-haystack-sandbox stack',
-      action: 'Can you explain the sc-haystack-sandbox stack?',
+      title: 'Find JIRA issues with',
+      label: 'status "In Progress"',
+      action:
+        'Find all JIRA issues that are currently in "In Progress" status in my projects',
     },
     {
-      title: 'Show me the repository',
-      label: 'information and structure',
-      action: 'Show me the repository information and file structure',
-    },
-    {
-      title: 'List recent commits',
-      label: 'and their changes',
-      action: 'List recent commits and show what files were changed',
-    },
-    {
-      title: 'Find all TypeScript',
-      label: 'component files',
-      action: 'Search for all TypeScript component files in the repository',
+      title: 'Show me the AWS resources',
+      label: 'in the sc-haystack stack',
+      action:
+        'Show me all AWS resources in the sc-haystack CloudFormation stack',
     },
   ];
 
