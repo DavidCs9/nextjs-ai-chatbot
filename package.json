@@ -18,9 +18,10 @@
     "db:up": "drizzle-kit up",
     "test": "export PLAYWRIGHT=True && pnpm exec playwright test",
     "prepare": "husky",
-    "docker:dev:up": "docker compose up -d postgres redis",
+    "docker:resources:up": "docker compose up -d postgres redis",
+    "docker:resources:down": "docker compose down postgres redis",
     "docker:local-prod:up": "docker compose up -d",
-    "docker:down": "docker compose down"
+    "docker:local-prod:down": "docker compose down"
   },
   "dependencies": {
     "@ai-sdk/openai": "2.0.0-beta.15",

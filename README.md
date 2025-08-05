@@ -88,8 +88,8 @@ AWS_DEFAULT_REGION=eu-west-1
 #### Option A: Docker
 
 1. Docker needs to be installed (Docker Destop >= 4.43.2 or Docker Engine >= 28.3.2)
-2. At the root directory run `pnpm docker:dev:up`.
-3. Once you are done, remember to `pnpm docker:down`.
+2. At the root directory run `pnpm docker:resources:up`
+3. Once you are done, remember to `pnpm docker:resources:down`.
 
 #### Option B: Local PostgreSQL
 
@@ -157,6 +157,13 @@ pnpm docker:local-prod:up
 ```
 
 The application will be available at [http://localhost:3000](http://localhost:3000)
+
+#### 7.3 Clean up
+
+
+```bash
+pnpm docker:local-prod:down
+```
 
 ## 📦 Available Scripts
 
