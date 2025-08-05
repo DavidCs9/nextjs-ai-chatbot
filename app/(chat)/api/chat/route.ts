@@ -39,6 +39,7 @@ import { ChatSDKError } from '@/lib/errors';
 import type { ChatMessage } from '@/lib/types';
 import type { ChatModel } from '@/lib/ai/models';
 import type { VisibilityType } from '@/components/visibility-selector';
+import { jiraTools } from '@/lib/ai/tools/jira-tools';
 
 export const maxDuration = 60;
 
@@ -182,6 +183,7 @@ export async function POST(request: Request) {
             }),
             queryAWSResources,
             queryGitHubResources,
+            ...jiraTools,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,

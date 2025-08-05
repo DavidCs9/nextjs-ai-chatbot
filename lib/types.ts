@@ -61,3 +61,37 @@ export interface Attachment {
   url: string;
   contentType: string;
 }
+
+// JIRA specific types
+export interface JiraIssue {
+  id: string;
+  key: string;
+  summary: string;
+  description: string;
+  status: {
+    name: string;
+    colorName: string;
+  };
+  priority: {
+    name: string;
+  };
+  assignee: {
+    displayName: string;
+    emailAddress: string;
+  } | null;
+  reporter: {
+    displayName: string;
+  };
+  created: string;
+  updated: string;
+  issuetype: {
+    name: string;
+    iconUrl: string;
+  };
+}
+
+export interface JiraSearchResponse {
+  issues: JiraIssue[];
+  total: number;
+  maxResults: number;
+}
