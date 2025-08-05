@@ -164,17 +164,6 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: convertToModelMessages(uiMessages),
           stopWhen: stepCountIs(MAX_STEP_COUNT),
-          experimental_activeTools:
-            selectedChatModel === 'chat-model-reasoning'
-              ? []
-              : [
-                  'getWeather',
-                  'createDocument',
-                  'updateDocument',
-                  'requestSuggestions',
-                  'queryAWSResources',
-                  'queryGitHubResources',
-                ],
           experimental_transform: smoothStream({ chunking: 'word' }),
           tools: {
             getWeather,
