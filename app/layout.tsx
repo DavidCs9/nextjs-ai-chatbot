@@ -8,8 +8,8 @@ import { SessionProvider } from 'next-auth/react';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'PoC AWS Chatbot',
-  description: 'PoC AWS Chatbot using the AI SDK.',
+  title: 'Stackly – Your dev stack, answered smartly.',
+  description: 'Stackly – Your dev stack, answered smartly.',
 };
 
 export const viewport = {

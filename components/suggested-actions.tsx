@@ -20,6 +20,11 @@ function PureSuggestedActions({
 }: SuggestedActionsProps) {
   const suggestedActions = [
     {
+      title: 'Find all JIRA issues ',
+      label: 'related to MCP',
+      action: 'Find all JIRA issues related to MCP',
+    },
+    {
       title: 'Show me all open issues',
       label: 'assigned to me in JIRA',
       action: 'Show me all open issues assigned to me across all JIRA projects',
