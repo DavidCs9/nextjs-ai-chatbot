@@ -396,7 +396,6 @@ const PurePreviewMessage = ({
                 const { toolCallId, state, toolName } = part;
 
                 if (state === 'input-available') {
-                  const { input } = part;
                   return (
                     <div key={toolCallId}>
                       <JiraResource
@@ -415,40 +414,6 @@ const PurePreviewMessage = ({
                       <JiraResource action={toolName} data={output} />
                     </div>
                   );
-                }
-              }
-
-              // Handle any tool call that contains 'jira' (fallback)
-              if (
-                type.includes('tool') &&
-                (type.includes('jira') ||
-                  ('toolName' in part && part.toolName?.includes('jira')))
-              ) {
-                if ('toolCallId' in part && 'state' in part) {
-                  const { toolCallId, state } = part;
-                  const toolName = 'toolName' in part ? part.toolName : type;
-
-                  if (state === 'input-available') {
-                    const input = 'input' in part ? part.input : {};
-                    return (
-                      <div key={toolCallId}>
-                        <JiraResource
-                          action={toolName}
-                          data={{ loading: true }}
-                          isLoading={true}
-                        />
-                      </div>
-                    );
-                  }
-
-                  if (state === 'output-available') {
-                    const output = 'output' in part ? part.output : {};
-                    return (
-                      <div key={toolCallId}>
-                        <JiraResource action={toolName} data={output} />
-                      </div>
-                    );
-                  }
                 }
               }
             })}
