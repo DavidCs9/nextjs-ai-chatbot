@@ -505,6 +505,65 @@ export const JiraResource = ({
         </Card>
       );
     }
+
+    case 'getTransitionsForJiraIssue': {
+      const rawData = data.content[0].text;
+      const parsedData = JSON.parse(rawData);
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-md">
+              <DatabaseIcon className="size-5 text-cyan-500" />
+              Successful fetch of Jira issue transitions
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="pt-6">
+            {parsedData.transitions.map((transition: any, index: number) => (
+              <div
+                key={index}
+                className="border-b border-muted py-2 last:border-0"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">{transition.name}</span>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      );
+    }
+
+    case 'transitionJiraIssue': {
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-md">
+              <CheckCircleIcon className="size-5 text-green-500" />
+              Issue Transitioned Successfully
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      );
+    }
+
+    case 'getJiraIssue': {
+      const rawData = data.content[0].text;
+      const parsedData = JSON.parse(rawData);
+
+      return (
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-md">
+              <DatabaseIcon className="size-5 text-cyan-500" />
+              Successful fetch of Jira issue
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <IssueCard issue={parsedData} />
+          </CardContent>
+        </Card>
+      );
+    }
   }
 
   // If no specific handler matched, show a generic success message
