@@ -20,7 +20,7 @@
     "prepare": "husky",
     "docker:resources:up": "docker compose up -d postgres redis",
     "docker:resources:down": "docker compose down postgres redis",
-    "docker:local-prod:up": "docker compose build --no-cache && docker compose up -d",
+    "docker:local-prod:up": "docker compose build --no-cache && docker compose up -d --remove-orphans",
     "docker:local-prod:down": "docker compose down --volumes --remove-orphans",
     "jira:logout": "rm -rf ~/.mcp-auth/mcp-remote-* && echo '🔓 JIRA MCP authentication cleared. Restart your dev server to re-authenticate with a different account.'",
     "jira:status": "ls -la ~/.mcp-auth/ 2>/dev/null || echo 'No MCP auth cache found'"
