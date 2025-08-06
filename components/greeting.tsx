@@ -22,7 +22,7 @@ export const Greeting = () => {
         transition={{ delay: 0.6 }}
         className="text-2xl text-zinc-500"
       >
-        Welcome to the PoC AWS Chatbot.
+        Welcome to Stackly – Your dev stack, answered smartly.
       </motion.div>
     </div>
   );
